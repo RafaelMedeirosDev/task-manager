@@ -47,4 +47,8 @@ public class User {
     public void preUpdate(){
         this.updatedAt = LocalDateTime.now();
     };
+
+    public UUID getId() {
+        return this.id;
+    }
 }
