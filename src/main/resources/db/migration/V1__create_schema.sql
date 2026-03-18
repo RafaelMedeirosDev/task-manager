@@ -11,10 +11,16 @@ create type TASK_STATUS as enum (
     'COMPLETED'
 );
 
+create type ROLE as enum (
+    'USER',
+    'ADMIN'
+);
+
 create table credentials (
     id uuid primary key default gen_random_uuid(),
     email text unique not null,
     password text not null,
+    role ROLE not null,
 
     created_at timestamptz not null default now(),
     updated_at timestamptz not null default now()

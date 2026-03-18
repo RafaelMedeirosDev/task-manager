@@ -29,7 +29,7 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO body) throws Exception {
+    public ResponseEntity<LoginResponseDTO> login(@Validated @RequestBody LoginRequestDTO body) throws Exception {
         LoginResponseDTO response = this.loginService.execute(new Credential(body.email(), body.password()));
         return ResponseEntity.ok(response);
     }

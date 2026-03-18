@@ -1,8 +1,10 @@
 package com.rafael.task_manager.domain;
 
-import com.rafael.task_manager.shared.enums.Role;
+import com.rafael.task_manager.shared.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,18 +30,25 @@ public class Credential implements UserDetails {
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "role",columnDefinition = "ROLE",nullable = false)
+    private RoleEnum role;
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    public Credential(String email, String password){
+    public Credential(String email, String password, RoleEnum role){
         this.email = email;
         this.password = password;
+        this.role = role;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+    };
+
+    public Credential (String email, String password){
+        this.email = email;
+        this.password = password;
     };
 
     @PrePersist
@@ -52,11 +61,6 @@ public class Credential implements UserDetails {
     public void preUpdate(){
         this.updatedAt = LocalDateTime.now();
     };
-
-    public UUID getId() {
-        return this.id;
-    }
-    public String getEmail(){return this.email;}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -71,10 +75,6 @@ public class Credential implements UserDetails {
     @Override
     public String getUsername() {
         return this.email;
-    }
-
-    public Role getRole(){
-        return this.role;
     }
 
 }

@@ -1,10 +1,10 @@
 package com.rafael.task_manager.controller;
 
-import com.rafael.task_manager.domain.User;
-import com.rafael.task_manager.service.CreateCredentialService;
-import com.rafael.task_manager.service.CreateUserService;
-import com.rafael.task_manager.shared.dto.CreateUserDTO;
+import com.rafael.task_manager.domain.Task;
+import com.rafael.task_manager.service.task.CreateTaskService;
+import com.rafael.task_manager.shared.dto.CreateTaskDTO;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -14,18 +14,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/tasks")
+public class TaskController {
 
     @Autowired
-    private CreateUserService createUserService;
+    private CreateTaskService createTaskService;
     @Autowired
     private HttpServletRequest request;
 
     @PostMapping()
-    public ResponseEntity<User> create(@Validated @RequestBody CreateUserDTO body){
-        System.out.println("Entrou no controller de criação de user");
-        User user = this.createUserService.execute(body);
-        return ResponseEntity.ok(user);
+    public ResponseEntity<Task> create(@Valid @RequestBody CreateTaskDTO data){
+        Task task = this.createTaskService.execute(data);
+        return ResponseEntity.ok(task);
     };
 }
