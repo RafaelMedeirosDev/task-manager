@@ -2,6 +2,7 @@ package com.rafael.task_manager.controller;
 
 import com.rafael.task_manager.domain.Task;
 import com.rafael.task_manager.service.task.CreateTaskService;
+import com.rafael.task_manager.service.task.SoftDeleteTaskService;
 import com.rafael.task_manager.service.task.UpdateTaskService;
 import com.rafael.task_manager.service.task.UpdateTaskStatusService;
 import com.rafael.task_manager.shared.dto.CreateTaskDTO;
@@ -26,6 +27,8 @@ public class TaskController {
     private UpdateTaskService updateTaskService;
     @Autowired
     private UpdateTaskStatusService updateTaskStatusService;
+    @Autowired
+    private SoftDeleteTaskService softDeleteTaskService;
 
     @PostMapping()
     public ResponseEntity<Task> create(@Valid @RequestBody CreateTaskDTO data){
@@ -42,6 +45,12 @@ public class TaskController {
     @PatchMapping("/{id}/status")
     public ResponseEntity<Task> updateStatus(@PathVariable UUID id){
         Task task = this.updateTaskStatusService.execute(id);
+        return ResponseEntity.ok(task);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Task> softDelete(@PathVariable UUID id){
+        Task task = this.softDeleteTaskService.execute(id);
         return ResponseEntity.ok(task);
     }
 }
