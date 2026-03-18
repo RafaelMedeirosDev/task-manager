@@ -29,8 +29,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         String path = request.getServletPath();
         String method = request.getMethod();
 
-        return ("POST".equals(method) && "/auth/login".equals(path))
-                || ("POST".equals(method) && "/user".equals(path));
+        return ("POST".equals(method) && ("/auth/login".equals(path)))
+                || ("POST".equals(method) && ("/user".equals(path)));
     }
 
     @Override
@@ -43,7 +43,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null) {
             String subject = tokenService.validateToken(token);
 
-            if (subject != null) {
+            if (subject != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 Credential credential = credentialRepository.findByEmail(subject);
 
                 if (credential != null) {
