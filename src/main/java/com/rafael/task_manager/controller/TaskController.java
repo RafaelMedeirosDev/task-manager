@@ -3,13 +3,13 @@ package com.rafael.task_manager.controller;
 import com.rafael.task_manager.domain.Task;
 import com.rafael.task_manager.service.task.CreateTaskService;
 import com.rafael.task_manager.service.task.UpdateTaskService;
+import com.rafael.task_manager.service.task.UpdateTaskStatusService;
 import com.rafael.task_manager.shared.dto.CreateTaskDTO;
 import com.rafael.task_manager.shared.dto.UpdateTaskDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -24,6 +24,8 @@ public class TaskController {
     private HttpServletRequest request;
     @Autowired
     private UpdateTaskService updateTaskService;
+    @Autowired
+    private UpdateTaskStatusService updateTaskStatusService;
 
     @PostMapping()
     public ResponseEntity<Task> create(@Valid @RequestBody CreateTaskDTO data){
@@ -34,6 +36,12 @@ public class TaskController {
     @PutMapping("/{id}")
     public ResponseEntity<Task> update(@PathVariable UUID id, @Valid @RequestBody UpdateTaskDTO data){
         Task task = this.updateTaskService.execute(id, data);
+        return ResponseEntity.ok(task);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Task> updateStatus(@PathVariable UUID id){
+        Task task = this.updateTaskStatusService.execute(id);
         return ResponseEntity.ok(task);
     }
 }
